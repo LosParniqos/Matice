@@ -9,27 +9,28 @@ namespace Matice
             Console.WriteLine("Kolik ma graf vrcholu?");
             int vrcholy = int.Parse(Console.ReadLine());
 
+            int INF = int.MaxValue;
             int[,] matice = new int[vrcholy, vrcholy];
 
             for (int x = 0; x < vrcholy; x++)
             {
                 for (int y = 0; y < vrcholy; y++)
                 {
-                    
+
                     if (x == y)
                     {
-                        matice[x, y] = 0;
+                        matice[x, y] = INF;
                         continue;
                     }
-                    Console.WriteLine("Je vrchol {0} propojen s vrcholem {1}? 1/2", x + 1, y + 1);
-                    switch (int.Parse(Console.ReadLine()))
+                    Console.WriteLine("Jakou vahu ma propoj {0} s {1}?", x + 1, y + 1);
+                    int VahaSpoje = int.Parse(Console.ReadLine());
+                    if (VahaSpoje == 0)
                     {
-                        case 1:
-                            matice[x, y] = 1;
-                            break;
-                        case 2:
-                            matice[x, y] = 0;
-                            break;
+                        matice[x, y] = INF;
+                    }
+                    else
+                    {
+                        matice[x, y] = VahaSpoje;
                     }
                 }
             }
@@ -38,7 +39,14 @@ namespace Matice
                 Console.WriteLine();
                 for (int y = 0; y < vrcholy; y++)
                 {
-                    Console.Write(matice[x, y]);
+                    if (matice[x, y] == INF)
+                    {
+                        Console.Write("MAX".ToString().PadLeft(5));
+                    }
+                    else
+                    {
+                        Console.Write(matice[x, y].ToString().PadLeft(5));
+                    }
                 }
             }
         }
