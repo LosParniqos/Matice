@@ -23,29 +23,35 @@ namespace Matice
             {INF,INF,3,3,INF,2,INF,3,0,4},
             {4,3,2,INF,INF,INF,INF,4,4,0},
             };
-            
-            int[,] MaticeOptimal = {
-            {0,2,INF,INF,INF,INF,4,5,INF,4},
-            {2,0,3,INF,INF,INF,INF,INF,INF,3},
-            {INF,3,0,4,INF,INF,INF,INF,3,2},
-            {INF,INF,4,0,INF,4,INF,INF,3,INF},
-            {INF,INF,INF,INF,0,3,INF,INF,INF,INF},
-            {INF,INF,INF,4,3,0,5,3,2,INF},
-            {4,INF,INF,INF,INF,5,0,3,INF,INF},
-            {5,INF,INF,INF,INF,3,3,0,3,4},
-            {INF,INF,3,3,INF,2,INF,3,0,4},
-            {4,3,2,INF,INF,INF,INF,4,4,0},
-            };
-            string[,] Objizdka = new string[vrcholy,vrcholy];
+
+            int[,] MaticeOptimal = new int[vrcholy, vrcholy];
+            for (int i = 0; i < vrcholy; i++)
+            {
+                for (int j = 0; j < vrcholy; j++)
+                {
+                    MaticeOptimal[i, j] = matice[i, j];
+                }
+            }
+            string[,] Objizdka = new string[vrcholy, vrcholy];
+            for (int i = 0; i < vrcholy; i++)
+            {
+                for (int j = 0; j < vrcholy; j++)
+                {
+                    if (matice[i, j] != INF && i != j)
+                    {
+                        Objizdka[i, j] = (i + 1).ToString() + "->" + (j + 1).ToString();
+                    }
+                    else
+                    {
+                        Objizdka[i, j] = "-";
+                    }
+                }
+            }
 
             FloydWarshall();
 
-
-
-
             void FloydWarshall()
             {
-                string KudyKam = "";
 
                 for (int k = 0; k < vrcholy; k++)
                 {
@@ -53,18 +59,15 @@ namespace Matice
                     {
                         for (int j = 0; j < vrcholy; j++)
                         {
-                            if (MaticeOptimal[i, j] < (MaticeOptimal[i, k] + MaticeOptimal[k, j]))
-                            {
-                                MaticeOptimal[i, j] = MaticeOptimal[i, j];
-  
-                            }
-                            else 
+                            if (MaticeOptimal[i, j] > MaticeOptimal[i, k] + MaticeOptimal[k, j])
                             {
                                 MaticeOptimal[i, j] = MaticeOptimal[i, k] + MaticeOptimal[k, j];
+                                if (Objizdka[i, j] != Objizdka[i, k] + "->" + (j + 1).ToString())
+                                {
+                                    Objizdka[i, j] = Objizdka[i, k] + "->" + (j + 1).ToString();
+                                }
                             }
-
                         }
-
                     }
                 }
                 Console.WriteLine("Odkud chceš cestu?");
@@ -72,8 +75,8 @@ namespace Matice
                 Console.WriteLine("Kam chceš cestu?");
                 int kam = int.Parse(Console.ReadLine());
                 Console.WriteLine(MaticeOptimal[odkud - 1, kam - 1]);
-                Console.WriteLine(KudyKam);
-                Console.WriteLine("Přes vrcholy {0}", KudyKam);
+                Console.WriteLine(Objizdka[odkud-1,kam-1]);
+
             }
 
 
